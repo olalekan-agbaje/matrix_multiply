@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 
 class MatirxMultiplyController extends Controller
 {
-    public int $arrayCount;
-    public array $array1;
-    public array $array2;
-    public int $array1ColCount;
-    public int $array1RowCount;
-    public int $array2ColCount;
-    public int $array2RowCount;
+    private int $arrayCount;
+    private array $array1;
+    private array $array2;
+    private int $array1ColCount;
+    private int $array1RowCount;
+    private int $array2ColCount;
+    private int $array2RowCount;
 
     public function index()
     {
@@ -42,6 +42,7 @@ class MatirxMultiplyController extends Controller
         $r2 = $this->array2RowCount;
         
         $output = [];
+        
         for ($i = 0; $i < $r; $i++) {
 
             for ($j = 0; $j < $c; $j++) { 

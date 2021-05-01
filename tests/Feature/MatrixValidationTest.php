@@ -31,7 +31,6 @@ class MatrixValidationTest extends TestCase
 
     public function testArrayMultiplicationIsValid()
     {
-        $this->withoutExceptionHandling();
         $response = $this->post('/api', $this->data());
         $result = $response->getData();
 
