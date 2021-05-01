@@ -16,10 +16,7 @@ trait NumberToAlphabetsTrait
 
     $i = floor($num / 26);
 
-    if ($i > 0) {
-      return $this->NumToAlpha($i) . $letters[$num % 26];
-    }
+    return $i > 0 ? $this->NumToAlpha($i) . $letters[$num % 26] : $letters[$num % 26];
 
-    return $letters[$num % 26];
   }
 }
