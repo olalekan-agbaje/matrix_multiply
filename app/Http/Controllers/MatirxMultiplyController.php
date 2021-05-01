@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\NumberToAlphabetsTrait;
 use Exception;
 use Illuminate\Http\Request;
 
 class MatirxMultiplyController extends Controller
 {
+    use NumberToAlphabetsTrait;
+    
     private int $arrayCount;
     private array $array1;
     private array $array2;
@@ -34,6 +37,23 @@ class MatirxMultiplyController extends Controller
         
     }
 
+    private function arrayNumToAlpha(array $matrix)
+    {
+        $row = count($matrix);
+        $col = count($matrix[0]);
+
+        for ($i = 0; $i < $row; $i++) {
+
+            for ($j = 0; $j < $col; $j++) {
+
+                $matrix[$i][$j] = $this->numtoAlpha($matrix[$i][$j]);
+
+            }
+        }
+        
+        return $matrix;
+    }
+
     private function multiplyArrays(): array
     {
         /* we perfom the array multiplication here */
@@ -57,7 +77,7 @@ class MatirxMultiplyController extends Controller
 
         }
 
-        return $output;
+        return $this->arrayNumToAlpha($output);
         
     }
 
