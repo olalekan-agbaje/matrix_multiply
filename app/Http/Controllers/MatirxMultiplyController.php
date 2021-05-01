@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\NumberToAlphabetsTrait;
 use Exception;
-use Illuminate\Http\Request;
 
 class MatirxMultiplyController extends Controller
 {

@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class MatrixValidationTest extends TestCase
@@ -42,11 +40,19 @@ class MatrixValidationTest extends TestCase
         return array_merge($this->data(), $newData);
     }
 
+    // private function correctNumericResponse()
+    // {
+    //     return [
+    //         [50, 42, 42],
+    //         [25, 96, 26]
+    //     ];
+    // }
+
     private function correctResponse()
     {
         return [
-            [50, 42, 42], 
-            [25, 96, 26]
+            ["AX", "AP", "AP"], 
+            ["Y", "CR", "Z"]
         ];
     }
 
