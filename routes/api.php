@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MatirxMultiplyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/',function(){
     return 'This is an API to multiply two matrices. Developed by Olalekan Agbaje - olalekanagbaje@gmail.com';
 });
+
+Route::post('/', [MatirxMultiplyController::class, 'index'])->name('mulitply');

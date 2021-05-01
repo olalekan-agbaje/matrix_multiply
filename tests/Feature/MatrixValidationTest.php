@@ -11,8 +11,15 @@ class MatrixValidationTest extends TestCase
     
     public function testRequestContaintsTwoArrays()
     {
-        // $this->withoutExceptionHandling();
         $response = $this->post('/api', $this->am([1]));
+
+        $response->assertStatus(500);
+    }
+
+    public function testArray1ColumnsEqualArray2Rows()
+    {
+        // $this->withoutExceptionHandling();
+        $response = $this->post('/api', $this->data());
 
         $response->assertStatus(500);
     }
@@ -29,6 +36,7 @@ class MatrixValidationTest extends TestCase
             [9,1,3,0],
         ];
         $matrixB = [
+            [2,9,0],
             [2,9,0],
             [1,3,5],
             [2,4,7],
