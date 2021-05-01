@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Traits\NumberToAlphabetsTrait;
 use Exception;
-
+use App\Http\Controllers\Traits\NumberToAlphabetsTrait;
 class MatirxMultiplyController extends Controller
 {
     use NumberToAlphabetsTrait;
@@ -32,25 +31,7 @@ class MatirxMultiplyController extends Controller
 
         $this->Array1ColumnsEqualArray2Rows();
 
-        return ($this->multiplyArrays());
-        
-    }
-
-    private function arrayNumToAlpha(array $matrix)
-    {
-        $row = count($matrix);
-        $col = count($matrix[0]);
-
-        for ($i = 0; $i < $row; $i++) {
-
-            for ($j = 0; $j < $col; $j++) {
-
-                $matrix[$i][$j] = $this->numtoAlpha($matrix[$i][$j]);
-
-            }
-        }
-        
-        return $matrix;
+        return $this->multiplyArrays();        
     }
 
     private function multiplyArrays(): array
@@ -76,8 +57,24 @@ class MatirxMultiplyController extends Controller
 
         }
 
-        return $this->arrayNumToAlpha($output);
+        return $this->arrayNumToAlpha($output);        
+    }
+
+    private function arrayNumToAlpha(array $matrix)
+    {
+        $row = count($matrix);
+        $col = count($matrix[0]);
+
+        for ($i = 0; $i < $row; $i++) {
+
+            for ($j = 0; $j < $col; $j++) {
+
+                $matrix[$i][$j] = $this->numtoAlpha($matrix[$i][$j]);
+
+            }
+        }
         
+        return $matrix;
     }
 
     private function countArray(array $rawArray): int
