@@ -13,32 +13,52 @@ class MatrixMultiplicationTest extends TestCase
 
     public function testRequestContaintsOnlyTwoArrays()
     {
-        Sanctum::actingAs(User::factory()->create());
-        $response = $this->post('/api/MultiplyMatrix', $this->am([1]));
+        $data = $this->data();
+        array_push($data['data'],[2, 9, 0]);
 
-        $response->assertStatus(500);
+        Sanctum::actingAs(User::factory()->create());
+        
+        $response = $this
+            ->withHeaders(['Accept' => 'application/json'])
+            ->postJson('/api/MultiplyMatrix', $data);
+        
+        $response
+            ->assertJsonValidationErrors(['data'])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['data'=>"Array count is invalid. Array count must be equal to 2"]);
     }
 
     public function testArray1ColumnsCountEqualArray2RowsCount()
     {
-        $badArray = [
-            1 => [
-                [2, 9, 0],
-                [2, 9, 0],
-            ]
-        ];
+        $data = $this->data();
+        array_push($data['data'][1],[2, 9, 0]);
+        
         Sanctum::actingAs(User::factory()->create());
-        $response = $this->post('/api/MultiplyMatrix', $this->am($badArray));
+        $response = $this
+            ->withHeaders(['Accept' => 'application/json'])
+            ->postJson('/api/MultiplyMatrix', $data);
 
-        $response->assertStatus(500);
+        $response
+            ->assertJsonValidationErrors(['data'])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['data'=>"Number of columns in the 1st Matirx Must be equal to number of rows in the 2nd Matrix."]);
     }
 
     public function testArrayValuesArePositiveNumbers()
     {
-        // $this->withoutExceptionHandling();
         Sanctum::actingAs(User::factory()->create());
-        $response = $this->post('/api/MultiplyMatrix', $this->negativeData());
-        $response->assertStatus(500);
+        
+        $response = $this
+            ->withHeaders(['Accept' => 'application/json'])
+            ->postJson('/api/MultiplyMatrix', $this->negativeData());
+
+        $response
+            ->assertJsonValidationErrors(['data.0','data.1'])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'data.0'=>"The array values are invalid. All values of both arrays must be zero or more.",
+                'data.1'=>"The array values are invalid. All values of both arrays must be zero or more."
+            ]);
     }
 
     public function testArrayMultiplicationIsValid()
@@ -47,26 +67,21 @@ class MatrixMultiplicationTest extends TestCase
         $response = $this->post('/api/MultiplyMatrix', $this->data());
         $result = $response->getData();
 
+        $response->assertStatus(200);
         $this->assertEquals($result, $this->correctResponse());
+        
     }
 
     public function testOnlyAuthenticatedUserIsAllowedToMultiplyMatrices()
     {
-        $badArray = [
-            1 => [
-                [2, 9, 0],
-                [2, 9, 0],
-            ]
-        ];
-
-        $response = $this->post('/api/MultiplyMatrix', $this->am($badArray));
+        $response = $this->post('/api/MultiplyMatrix', $this->data());
 
         $response->assertStatus(302);
     }
 
     private function am(array $newData)
     {
-        return array_merge($this->data(), $newData);
+        return array_push($this->data(), $newData);
     }
 
     private function correctResponse()
@@ -90,17 +105,17 @@ class MatrixMultiplicationTest extends TestCase
             [8, 1, 5],
         ];
 
-        $data = [
-            $matrixA, $matrixB
+        return [
+            'data'=>[
+                $matrixA, $matrixB
+            ]
         ];
-
-        return $data;
     }
 
     private function negativeData()
     {
         $matrixA = [
-            [3, 2, 1, 5],
+            [3, 2, -1, 5],
             [9, 1, 3, 0],
         ];
         $matrixB = [
@@ -111,7 +126,9 @@ class MatrixMultiplicationTest extends TestCase
         ];
 
         $data = [
-            $matrixA, $matrixB
+            'data'=>[
+                $matrixA, $matrixB
+            ]
         ];
 
         return $data;
