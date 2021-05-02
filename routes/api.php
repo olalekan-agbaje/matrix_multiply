@@ -26,6 +26,7 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/MultiplyMatrix', [MatirxMultiplyController::class, 'index'])->name('mulitply');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
