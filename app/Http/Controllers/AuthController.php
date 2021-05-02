@@ -40,10 +40,21 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'status' => 'Success',
+            'status' => 'Login Success',
             'access_token' => auth()->user()->createToken('auth_token')->plainTextToken,
             'token_type' => 'Bearer'
-        ], 200);
+        ]);
+    }
+
+    public function logout(Request $request){
+        
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            'status' => 'Logout Success',
+            'message' => 'Logged Out',
+        ]);
+
     }
 
     private function validateData(Request $request)
