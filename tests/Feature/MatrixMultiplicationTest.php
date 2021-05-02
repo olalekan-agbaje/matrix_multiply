@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MatrixMultiplicationTest extends TestCase
 {
+    use RefreshDatabase;
 
     public function testRequestContaintsOnlyTwoArrays()
     {
