@@ -9,7 +9,7 @@ class MatrixValidationTest extends TestCase
 
     public function testRequestContaintsTwoArrays()
     {
-        $response = $this->post('/api', $this->am([1]));
+        $response = $this->post('/api/MultiplyMatrix', $this->am([1]));
 
         $response->assertStatus(500);
     }
@@ -22,14 +22,23 @@ class MatrixValidationTest extends TestCase
                 [2, 9, 0],
             ]
         ];
-        $response = $this->post('/api', $this->am($badArray));
+        $response = $this->post('/api/MultiplyMatrix', $this->am($badArray));
 
+        $response->assertStatus(500);
+    }
+
+    public function testArrayValuesArePositiveNumbers()
+    {
+        // $this->withoutExceptionHandling();
+        
+        $response = $this->post('/api/MultiplyMatrix', $this->negativeData());
+        
         $response->assertStatus(500);
     }
 
     public function testArrayMultiplicationIsValid()
     {
-        $response = $this->post('/api', $this->data());
+        $response = $this->post('/api/MultiplyMatrix', $this->data());
         $result = $response->getData();
 
         $this->assertEquals($result, $this->correctResponse());
@@ -66,6 +75,26 @@ class MatrixValidationTest extends TestCase
             [2, 9, 0],
             [1, 3, 5],
             [2, 4, 7],
+            [8, 1, 5],
+        ];
+
+        $data = [
+            $matrixA, $matrixB
+        ];
+
+        return $data;
+    }
+
+    private function negativeData()
+    {
+        $matrixA = [
+            [3, 2, 1, 5],
+            [9, 1, 3, 0],
+        ];
+        $matrixB = [
+            [2, 9, 0],
+            [1, 3, 5],
+            [2, 4, -7],
             [8, 1, 5],
         ];
 

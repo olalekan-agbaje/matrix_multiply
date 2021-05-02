@@ -6,10 +6,11 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Http\Controllers\Traits\NumberToAlphabetsTrait;
+
 class MatirxMultiplyController extends Controller
 {
     use NumberToAlphabetsTrait;
-    
+
     private int $arrayCount;
     private array $array1;
     private array $array2;
@@ -21,7 +22,7 @@ class MatirxMultiplyController extends Controller
     public function index()
     {
         $rawArray = request()->all();
-        
+
         $this->arrayCount = $this->countArray($rawArray);
 
         $this->arrayCountIsValid();
@@ -29,9 +30,23 @@ class MatirxMultiplyController extends Controller
         $this->array1 = $rawArray[0];
         $this->array2 = $rawArray[1];
 
+        $this->arrayElementsAreValid();
+
         $this->Array1ColumnsEqualArray2Rows();
 
-        return $this->multiplyArrays();        
+        return $this->multiplyArrays();
+    }
+
+    private function arrayElementsAreValid()
+    {
+        $x = [$this->array1, $this->array2];
+        array_walk_recursive($x, function ($v) {
+            if ($v < 0) {
+                throw new Exception("Array elements must be all be integers.", 500);
+            }
+        });
+
+        return true;
     }
 
     private function multiplyArrays(): array
@@ -40,24 +55,22 @@ class MatirxMultiplyController extends Controller
         $r = $this->array1RowCount;
         $c = $this->array2ColCount;
         $r2 = $this->array2RowCount;
-        
+
         $output = [];
-        
+
         for ($i = 0; $i < $r; $i++) {
 
-            for ($j = 0; $j < $c; $j++) { 
+            for ($j = 0; $j < $c; $j++) {
 
                 $output[$i][$j] = 0;
 
                 for ($k = 0; $k < $r2; $k++) {
                     $output[$i][$j] += $this->array1[$i][$k] * $this->array2[$k][$j];
                 }
-
             }
-
         }
 
-        return $this->arrayNumToAlpha($output);        
+        return $this->arrayNumToAlpha($output);
     }
 
     private function arrayNumToAlpha(array $matrix)
@@ -70,10 +83,9 @@ class MatirxMultiplyController extends Controller
             for ($j = 0; $j < $col; $j++) {
 
                 $matrix[$i][$j] = $this->numtoAlpha($matrix[$i][$j]);
-
             }
         }
-        
+
         return $matrix;
     }
 
@@ -82,11 +94,10 @@ class MatirxMultiplyController extends Controller
         return count($rawArray);
     }
 
-    private function arrayCountIsValid() : bool
+    private function arrayCountIsValid(): bool
     {
-        if($this->arrayCount != 2)
-        {
-            throw new Exception("Array count is invalid. Array count must be equal to 2", 500);             
+        if ($this->arrayCount != 2) {
+            throw new Exception("Array count is invalid. Array count must be equal to 2", 500);
         }
 
         return true;
@@ -94,9 +105,8 @@ class MatirxMultiplyController extends Controller
 
     private function Array1ColumnsEqualArray2Rows(): bool
     {
-        if(count($this->array1[0]) != count($this->array2))
-        {
-            throw new Exception("Number of columns in the 1st Matirx Must be equal to number of rows in the 2nd Matrix.", 500);             
+        if (count($this->array1[0]) != count($this->array2)) {
+            throw new Exception("Number of columns in the 1st Matirx Must be equal to number of rows in the 2nd Matrix.", 500);
         }
 
         $this->array1ColCount = count($this->array1[0]);
