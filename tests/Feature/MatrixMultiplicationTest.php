@@ -34,6 +34,7 @@ class MatrixMultiplicationTest extends TestCase
         array_push($data['data'][1],[2, 9, 0]);
         
         Sanctum::actingAs(User::factory()->create());
+
         $response = $this
             ->withHeaders(['Accept' => 'application/json'])
             ->postJson('/api/MultiplyMatrix', $data);
@@ -64,12 +65,14 @@ class MatrixMultiplicationTest extends TestCase
     public function testArrayMultiplicationIsValid()
     {
         Sanctum::actingAs(User::factory()->create());
+
         $response = $this->post('/api/MultiplyMatrix', $this->data());
+
         $result = $response->getData();
 
         $response->assertStatus(200);
-        $this->assertEquals($result, $this->correctResponse());
-        
+
+        $this->assertEquals($result, $this->correctResponse());        
     }
 
     public function testOnlyAuthenticatedUserIsAllowedToMultiplyMatrices()

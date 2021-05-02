@@ -12,7 +12,6 @@ class MatirxMultiplyController extends Controller
 {
     use NumberToAlphabetsTrait;
 
-    private int $arrayCount;
     private array $array1;
     private array $array2;
     private int $array1ColCount;
