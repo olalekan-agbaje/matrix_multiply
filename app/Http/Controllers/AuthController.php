@@ -12,7 +12,6 @@ class AuthController extends Controller
     public function signup(Request $request)
     {
         $validData = $this->validateData($request);
-        dd($validData);
 
         $validData['password'] = Hash::make($validData['password']);
 
@@ -37,7 +36,6 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'Error',
                 'message' => 'Invalid credentials',
-                // 'data'=>'data',
             ], 401);
         }
 
@@ -52,7 +50,7 @@ class AuthController extends Controller
     {
         return $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users|max:255',
+            'email' => 'required|string|email|unique:users,email|max:255',
             'password' => 'required|string|min:8',
         ]);
     }
