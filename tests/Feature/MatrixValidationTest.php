@@ -3,15 +3,33 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 class MatrixValidationTest extends TestCase
 {
 
     public function testRequestContaintsTwoArrays()
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->post('/api/MultiplyMatrix', $this->am([1]));
 
         $response->assertStatus(500);
+    }
+
+    public function testOnlyAuthedUserAllowed()
+    {
+
+        $badArray = [
+            1 => [
+                [2, 9, 0],
+                [2, 9, 0],
+            ]
+        ];
+        
+        $response = $this->post('/api/MultiplyMatrix', $this->am($badArray));
+
+        $response->assertStatus(302);
     }
 
     public function testArray1ColumnsEqualArray2Rows()
@@ -22,6 +40,7 @@ class MatrixValidationTest extends TestCase
                 [2, 9, 0],
             ]
         ];
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->post('/api/MultiplyMatrix', $this->am($badArray));
 
         $response->assertStatus(500);
@@ -30,14 +49,14 @@ class MatrixValidationTest extends TestCase
     public function testArrayValuesArePositiveNumbers()
     {
         // $this->withoutExceptionHandling();
-        
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->post('/api/MultiplyMatrix', $this->negativeData());
-        
         $response->assertStatus(500);
     }
 
     public function testArrayMultiplicationIsValid()
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->post('/api/MultiplyMatrix', $this->data());
         $result = $response->getData();
 
@@ -60,7 +79,7 @@ class MatrixValidationTest extends TestCase
     private function correctResponse()
     {
         return [
-            ["AX", "AP", "AP"], 
+            ["AX", "AP", "AP"],
             ["Y", "CR", "Z"]
         ];
     }
