@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MatirxMultiplyController;
@@ -24,3 +25,6 @@ Route::get('/',function(){
 });
 
 Route::post('/', [MatirxMultiplyController::class, 'index'])->name('mulitply');
+
+Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
