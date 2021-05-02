@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Exception;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Traits\NumberToAlphabetsTrait;
 
 class MatirxMultiplyController extends Controller
@@ -22,31 +23,45 @@ class MatirxMultiplyController extends Controller
     public function index()
     {
         $rawArray = request()->all();
+        
+        $validated = request()->validate([            
+            'data' => ['required',function($attribute, $value, $fail){
+                    if (count($value) != 2) {
+                        $fail("Array count is invalid. Array count must be equal to 2");
+                    }
+                },
+                function($attribute, $value, $fail){
+                    if (count($value[0][1]) != count($value[1])) {
+                        $fail("Number of columns in the 1st Matirx Must be equal to number of rows in the 2nd Matrix.");
+                    }
+                }
+            ],
+            'data.*' => ['required','array',function($attribute, $value, $fail) {
+    
+                array_walk_recursive($value, function ($v, $k, $fail) {
 
-        $this->arrayCount = $this->countArray($rawArray);
+                    if ($v < 0) {
+                        $fail("The array values are invalid. All values of both arrays must be zero or more.");
+                    };
 
-        $this->arrayCountIsValid();
+                }, $fail);    
+            }]
+        ]);
 
+        if (!$validated) {
+            return response()->json(['errors' => $rawArray->message()], 422);
+        } 
+
+        $rawArray = $rawArray['data'];
         $this->array1 = $rawArray[0];
         $this->array2 = $rawArray[1];
 
-        $this->arrayElementsAreValid();
-
-        $this->Array1ColumnsEqualArray2Rows();
+        $this->array1ColCount = count($this->array1[0]);
+        $this->array1RowCount = count($this->array1);
+        $this->array2ColCount = count($this->array2[0]);
+        $this->array2RowCount = count($this->array2);
 
         return $this->multiplyArrays();
-    }
-
-    private function arrayElementsAreValid()
-    {
-        $x = [$this->array1, $this->array2];
-        array_walk_recursive($x, function ($v) {
-            if ($v < 0) {
-                throw new Exception("Array elements must be all be integers.", 500);
-            }
-        });
-
-        return true;
     }
 
     private function multiplyArrays(): array
@@ -87,33 +102,5 @@ class MatirxMultiplyController extends Controller
         }
 
         return $matrix;
-    }
-
-    private function countArray(array $rawArray): int
-    {
-        return count($rawArray);
-    }
-
-    private function arrayCountIsValid(): bool
-    {
-        if ($this->arrayCount != 2) {
-            throw new Exception("Array count is invalid. Array count must be equal to 2", 500);
-        }
-
-        return true;
-    }
-
-    private function Array1ColumnsEqualArray2Rows(): bool
-    {
-        if (count($this->array1[0]) != count($this->array2)) {
-            throw new Exception("Number of columns in the 1st Matirx Must be equal to number of rows in the 2nd Matrix.", 500);
-        }
-
-        $this->array1ColCount = count($this->array1[0]);
-        $this->array1RowCount = count($this->array1);
-        $this->array2ColCount = count($this->array2[0]);
-        $this->array2RowCount = count($this->array2);
-
-        return true;
-    }
+    }    
 }
