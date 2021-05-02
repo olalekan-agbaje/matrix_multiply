@@ -20,11 +20,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/',function(){
+Route::get('/', function () {
     return 'This is an API to multiply two matrices. Developed by Olalekan Agbaje - olalekanagbaje@gmail.com';
 });
 
-Route::post('/', [MatirxMultiplyController::class, 'index'])->name('mulitply');
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::post('/MultiplyMatrix', [MatirxMultiplyController::class, 'index'])->name('mulitply');
+});
 
 Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/login', function () {
+    return response()->json([
+        'status' => 'Error',
+        'message' => 'Unauthenticated',
+    ], 401);
+});
