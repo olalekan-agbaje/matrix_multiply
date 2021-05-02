@@ -6,10 +6,10 @@ use Tests\TestCase;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
-class MatrixValidationTest extends TestCase
+class MatrixMultiplicationTest extends TestCase
 {
 
-    public function testRequestContaintsTwoArrays()
+    public function testRequestContaintsOnlyTwoArrays()
     {
         Sanctum::actingAs(User::factory()->create());
         $response = $this->post('/api/MultiplyMatrix', $this->am([1]));
@@ -17,22 +17,7 @@ class MatrixValidationTest extends TestCase
         $response->assertStatus(500);
     }
 
-    public function testOnlyAuthedUserAllowed()
-    {
-
-        $badArray = [
-            1 => [
-                [2, 9, 0],
-                [2, 9, 0],
-            ]
-        ];
-        
-        $response = $this->post('/api/MultiplyMatrix', $this->am($badArray));
-
-        $response->assertStatus(302);
-    }
-
-    public function testArray1ColumnsEqualArray2Rows()
+    public function testArray1ColumnsCountEqualArray2RowsCount()
     {
         $badArray = [
             1 => [
@@ -63,18 +48,24 @@ class MatrixValidationTest extends TestCase
         $this->assertEquals($result, $this->correctResponse());
     }
 
+    public function testOnlyAuthenticatedUserIsAllowedToMultiplyMatrices()
+    {
+        $badArray = [
+            1 => [
+                [2, 9, 0],
+                [2, 9, 0],
+            ]
+        ];
+
+        $response = $this->post('/api/MultiplyMatrix', $this->am($badArray));
+
+        $response->assertStatus(302);
+    }
+
     private function am(array $newData)
     {
         return array_merge($this->data(), $newData);
     }
-
-    // private function correctNumericResponse()
-    // {
-    //     return [
-    //         [50, 42, 42],
-    //         [25, 96, 26]
-    //     ];
-    // }
 
     private function correctResponse()
     {
