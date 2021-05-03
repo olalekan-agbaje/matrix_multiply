@@ -1,62 +1,164 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<p align="center"><h1>MatrixMultiplier - Laravel API</h1></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# About Matrix Multiplier
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This is a laravel application to mulitply two matrices. 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+It is REST API based and recives the two matrices as an array, perfomrs some required validation and return an array of characters like Excel header columns.
 
-## Learning Laravel
+## Example
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+If you post the array below to the designated endpoint, 
+```json
+{
+    "data" : [
+        [
+            [1,2,3],[4,5,6],[7,8,9]
+        ],
+        [
+            [10,11],[12,13],[14,15]
+        ]
+    ]
+}
+```
+it will return something like this
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```json
+[
+    [
+        "BX","CD"
+    ],
+    [
+        "GB","GQ"
+    ],
+    [
+        "KF","LD"
+    ]
+]
+```
+You are required to signup and login before you can post a request. This is managed by **Laravel Sanctum Middleware**.
 
-## Laravel Sponsors
+# Requirements
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+To set it up, the following requirements need to be met:
+- PHP 7.4 or PHP 8.0
+- Composer
+- Git
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+# Steps to set it up 
+### **(the commands below assumes a linux environment)**
 
-## Contributing
+- Clone the repository
+- Navigate to your local project directory
+- Run composer install to get all the required laravel dependecies and packages
+```bash
+$ composer install
+```
+- Copy the .env.example file to .env 
+```bash
+$ cp .env.example .env
+```
+- Run the php artisan key generate command to Set the application key in your .env file
+```bash
+$ php artisan key:generate
+```
+- Create a database.sqlite file (or you can switch databases if you prefer)
+```bash
+$ touch database/database.sqlite
+```
+- Run php artisan migrate command to initialize the database with the relevant tables
+```bash
+$ php artisan migrate
+```
+- Run php artisan serve command to start the webserver
+```bash
+$ php artisan serve OR $ php artisan serve --host=0.0.0.0
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
+# Using the API
+### Do include the `Content-Type:application/json` and `Accept:application/json` headers in your requests from here on.
+- Visit the signup endpoint (http://127.0.0.1:8000/api/signup) or whatever IP address artisan is serving on and **POST** the data in the structure below:
+### `Postman` is a good choice for the following steps.
+```json
+{
+   "name": "New User",
+   "email": "user@email.com",
+   "password": "secretesauce"
+}
+```
+You will get a relevant error message or success response like this:
+```json
+{
+    "access_token": "5|Z8nmYkUMHqCsJ2GFE8VbUM0wVpkDR1qJGeevLI2x",
+    "token_type": "Bearer"
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Visit the login endpoint (http://127.0.0.1:8000/api/login) with the same credentials (assuming the previous step was successful)
+```json
+{
+   "email": "user@email.com",
+   "password": "secrete"
+}
+```
+You will get a relevant error message or success response like this:
+```json
+{
+    "status": "Login Success",
+    "access_token": "2|b6GHoe5CdOivxjYSMmhfXdwQqhLtVkst4yFrebUR",
+    "token_type": "Bearer"
+}
+```
+- Copy the returned `access_token` from the previous step and use it as an Authorization header in the next step
 
-## Security Vulnerabilities
+- Visit the MultiplyMatrix endpoint (http://localhost:8000/api/MultiplyMatrix) and `POST` the matrices in the format below (invalid matrix format will return relevant validation messages):
+### Do remember ot include the `access_token` as a `Bearer` Authorization header in this request:
+`Authorization:Bearer Z8nmYkUMHqCsJ2GFE8VbUM0wVpkDR1qJGeevLI2x`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```json
+{
+    "data" : [
+        [
+            [1,2,3],[4,5,6],[7,8,9]
+        ],
+        [
+            [10,11],[12,13],[14,15]
+        ]
+    ]
+}
+```
+- A JSON response like the one below will be presendted to you.
+```json
+[
+    [
+        "BX","CD"
+    ],
+    [
+        "GB","GQ"
+    ],
+    [
+        "KF","LD"
+    ]
+]
+```
+- You can log out by sending a `POST` request to the logout endpoint (http://localhost:8000/api/logout). This will end your session and subsequent requests will return an "Unauthenticated" error response.
 
-## License
+```json
+{
+    "message": "Unauthenticated."
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Tests
+
+This application was developed using TDD and the tests are available in the `tests` directory. You can run `phpunit` to see the results. 
+
+## Bugs, Comments, Questions
+You can open an issue if you have questions or comments or have found some bugs in the application.
+Do no hesitate to share your thoughts if you see some areas of improvement.
+
+Thanks.
