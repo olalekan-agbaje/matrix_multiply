@@ -52,7 +52,7 @@ class MatrixMultiplicationTest extends TestCase
         $response = $this
             ->withHeaders(['Accept' => 'application/json'])
             ->postJson('/api/MultiplyMatrix', $this->negativeData());
-
+            
         $response
             ->assertJsonValidationErrors(['data.0','data.1'])
             ->assertStatus(422)
