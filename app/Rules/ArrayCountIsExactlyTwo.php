@@ -25,7 +25,9 @@ class ArrayCountIsExactlyTwo implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (count($value) == 2) return true;
+        if (count($value) == 2) {
+            return true;
+        } 
     }
 
     /**

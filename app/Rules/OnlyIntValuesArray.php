@@ -27,9 +27,9 @@ class OnlyIntValuesArray implements Rule
     {
         $valid = true;
         
-        array_walk_recursive($value, function ($v) use (&$valid){
+        array_walk_recursive($value, function ($v) use (&$valid) {
 
-            if($v < 0){
+            if ($v < 0) {
                 $valid = false;
             } 
         });   

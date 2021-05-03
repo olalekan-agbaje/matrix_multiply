@@ -25,7 +25,13 @@ class ArrayColInAEqualsRowsInB implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (count($value[0][1]) == count($value[1])) return true;
+        if (
+            sizeof($value[0]) 
+            && sizeof($value[1]) 
+            && count($value[0][1]) == count($value[1])
+        ) {
+            return true;
+        } 
     }
 
     /**
