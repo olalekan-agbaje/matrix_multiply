@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Rules\OnlyIntValuesArray;
+use App\Rules\ArrayCountIsExactlyTwo;
+use App\Rules\ArrayColInAEqualsRowsInB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Traits\NumberToAlphabetsTrait;
 
@@ -24,27 +27,8 @@ class MatirxMultiplyController extends Controller
         $rawArray = request()->all();
         
         $validated = request()->validate([            
-            'data' => ['required',function($attribute, $value, $fail){
-                    if (count($value) != 2) {
-                        $fail("Array count is invalid. Array count must be equal to 2");
-                    }
-                },
-                function($attribute, $value, $fail){
-                    if (count($value[0][1]) != count($value[1])) {
-                        $fail("Number of columns in the 1st Matirx Must be equal to number of rows in the 2nd Matrix.");
-                    }
-                }
-            ],
-            'data.*' => ['required','array',function($attribute, $value, $fail) {
-    
-                array_walk_recursive($value, function ($v, $k, $fail) {
-
-                    if ($v < 0) {
-                        $fail("The array values are invalid. All values of both arrays must be zero or more.");
-                    };
-
-                }, $fail);    
-            }]
+            'data' => ['required',new ArrayCountIsExactlyTwo,new ArrayColInAEqualsRowsInB],
+            'data.*' => ['required','array', new OnlyIntValuesArray]
         ]);
 
         if (!$validated) {
