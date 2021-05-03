@@ -9,7 +9,7 @@ trait NumberToAlphabetsTrait
      * @param int $num
      * @return string
      */
-    public function NumToAlpha(int $num): string
+    public function numToAlpha(int $num): string
     {
         // fixed set of 26 uppercase letters to be used for the conversion
         $letters = [
@@ -27,7 +27,7 @@ trait NumberToAlphabetsTrait
 
         $i = floor($num / 26);
 
-        return $i > 0 ? $this->NumToAlpha($i) . $letters[$num % 26] : $letters[$num % 26];
+        return $i > 0 ? $this->numToAlpha($i) . $letters[$num % 26] : $letters[$num % 26];
     }
     
     /**
