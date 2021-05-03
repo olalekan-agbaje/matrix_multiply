@@ -22,12 +22,12 @@ class MatirxMultiplyController extends Controller
     private int $array2ColCount;
     private int $array2RowCount;
 
-    public function index()
+    public function index(): array
     {
         $rawArray = request()->all();
         
         $validated = request()->validate([            
-            'data' => ['required',new ArrayCountIsExactlyTwo,new ArrayColInAEqualsRowsInB],
+            'data' => ['required','present','filled',new ArrayCountIsExactlyTwo,new ArrayColInAEqualsRowsInB],
             'data.*' => ['required','array', new OnlyIntValuesArray]
         ]);
 
@@ -70,20 +70,5 @@ class MatirxMultiplyController extends Controller
 
         return $this->arrayNumToAlpha($output);
     }
-
-    private function arrayNumToAlpha(array $matrix)
-    {
-        $row = count($matrix);
-        $col = count($matrix[0]);
-
-        for ($i = 0; $i < $row; $i++) {
-
-            for ($j = 0; $j < $col; $j++) {
-
-                $matrix[$i][$j] = $this->numtoAlpha($matrix[$i][$j]);
-            }
-        }
-
-        return $matrix;
-    }    
+    
 }
