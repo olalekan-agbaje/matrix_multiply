@@ -31,8 +31,7 @@ class MatirxMultiplyController extends Controller
         } 
          
         /**
-         * if there are no errors load the data and process the arrays
-         * get the column and row counts for each array
+         * if there are no errors create new MatrixMultiplier
          * return the multiplied array
          */
         

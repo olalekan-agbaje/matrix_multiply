@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\Traits;
+declare(strict_types=1);
 
+namespace App\Models\Traits;
 trait NumberToAlphabetsTrait
 {
     /**
@@ -23,11 +24,11 @@ trait NumberToAlphabetsTrait
          * if the number is still greater than zero call the function again.
          * else return the character in the corresponding position
          */
-        
+
         // ensuere that $num is never less than zero
         $num = $num > 0 ? $num -= 1 : 0; 
 
-        $i = floor($num / 26);
+        $i = (int) floor($num / 26);
 
         return $i > 0 ? $this->numToAlpha($i) . $letters[$num % 26] : $letters[$num % 26];
     }

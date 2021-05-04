@@ -3,7 +3,6 @@
 namespace App\Matrix;
 
 use App\Models\Traits\NumberToAlphabetsTrait;
-
 /**
  * Matrix Multiplier class
  */
