@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Traits;
+namespace App\Models\Traits;
 
 trait NumberToAlphabetsTrait
 {
@@ -23,7 +23,9 @@ trait NumberToAlphabetsTrait
          * if the number is still greater than zero call the function again.
          * else return the character in the corresponding position
          */
-        $num -= 1;
+        
+        // ensuere that $num is never less than zero
+        $num = $num > 0 ? $num -= 1 : 0; 
 
         $i = floor($num / 26);
 
@@ -32,7 +34,7 @@ trait NumberToAlphabetsTrait
     
     /**
      * Convert the numeric array to an alphabetic array
-     * @var array $matrix
+     * @param array $matrix
      * @return array
      */
     public function arrayNumToAlpha(array $matrix): array
