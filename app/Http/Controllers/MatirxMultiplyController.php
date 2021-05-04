@@ -37,7 +37,7 @@ class MatirxMultiplyController extends Controller
         ]);
 
         if (!$validated) {
-            return response()->json(['errors' => $rawArray->message()], 422);
+            return response()->json(['errors' => $validated->message()], 422);
         } 
          
         /**
