@@ -26,15 +26,14 @@ class OnlyIntValuesArray implements Rule
     public function passes($attribute, $value)
     {
         $valid = true;
-        
-        array_walk_recursive($value, function ($v) use (&$valid) {
 
+        array_walk_recursive($value, function ($v) use (&$valid) {
             if ($v < 0) {
                 $valid = false;
-            } 
-        });   
+            }
+        });
 
-        return $valid; 
+        return $valid;
     }
 
     /**

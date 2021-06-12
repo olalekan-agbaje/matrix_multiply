@@ -3,13 +3,14 @@
 namespace App\Matrix;
 
 use App\Models\Traits\NumberToAlphabetsTrait;
+
 /**
  * Matrix Multiplier class
  */
 class MatrixMultiplier
 {
     use NumberToAlphabetsTrait;
-    
+
     private array $array1;
     private array $array2;
 
@@ -47,18 +48,15 @@ class MatrixMultiplier
         * loop through the columns of the second array
         * initialize the current cell
         * loop through each of the rows of the second array
-        * perform the multiplicatoin of cell in array 1 and array 2 
+        * perform the multiplicatoin of cell in array 1 and array 2
         * while adding the result to get the total value for the current cell
         * convert the array using the NumberToAlphabetsTrait
         */
         for ($i = 0; $i < $r; $i++) {
-
             for ($j = 0; $j < $c; $j++) {
-
                 $output[$i][$j] = 0;
 
                 for ($k = 0; $k < $r2; $k++) {
-
                     $output[$i][$j] += $this->array1[$i][$k] * $this->array2[$k][$j];
                 }
             }

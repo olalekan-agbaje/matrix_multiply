@@ -14,14 +14,14 @@ class MatrixMultiplicationTest extends TestCase
     public function testRequestContaintsOnlyTwoArrays()
     {
         $data = $this->data();
-        array_push($data['data'],[2, 9, 0]);
+        array_push($data['data'], [2, 9, 0]);
 
         Sanctum::actingAs(User::factory()->create());
-        
+
         $response = $this
             ->withHeaders(['Accept' => 'application/json'])
             ->postJson('/api/MultiplyMatrix', $data);
-        
+
         $response
             ->assertJsonValidationErrors(['data'])
             ->assertStatus(422)
@@ -31,8 +31,8 @@ class MatrixMultiplicationTest extends TestCase
     public function testArray1ColumnsCountEqualArray2RowsCount()
     {
         $data = $this->data();
-        array_push($data['data'][1],[2, 9, 0]);
-        
+        array_push($data['data'][1], [2, 9, 0]);
+
         Sanctum::actingAs(User::factory()->create());
 
         $response = $this
@@ -48,11 +48,11 @@ class MatrixMultiplicationTest extends TestCase
     public function testArrayValuesArePositiveNumbers()
     {
         Sanctum::actingAs(User::factory()->create());
-        
+
         $response = $this
             ->withHeaders(['Accept' => 'application/json'])
             ->postJson('/api/MultiplyMatrix', $this->negativeData());
-            
+
         $response
             ->assertJsonValidationErrors(['data.0','data.1'])
             ->assertStatus(422)
@@ -72,7 +72,7 @@ class MatrixMultiplicationTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertEquals($result, $this->correctResponse());        
+        $this->assertEquals($result, $this->correctResponse());
     }
 
     public function testOnlyAuthenticatedUserIsAllowedToMultiplyMatrices()

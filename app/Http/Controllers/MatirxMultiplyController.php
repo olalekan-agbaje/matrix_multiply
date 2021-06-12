@@ -20,24 +20,23 @@ class MatirxMultiplyController extends Controller
     public function index(): array
     {
         $rawArray = request()->all();
-        
-        $validated = request()->validate([            
-            'data' => ['required','present','filled',new ArrayCountIsExactlyTwo,new ArrayColInAEqualsRowsInB],
-            'data.*' => ['required','array', new OnlyIntValuesArray]
+
+        $validated = request()->validate([
+            'data' => ['required','present','filled',new ArrayCountIsExactlyTwo(),new ArrayColInAEqualsRowsInB()],
+            'data.*' => ['required','array', new OnlyIntValuesArray()]
         ]);
 
         if (!$validated) {
             return response()->json(['errors' => $validated], 422);
-        } 
-         
+        }
+
         /**
          * if there are no errors create new MatrixMultiplier
          * return the multiplied array
          */
-        
+
         $matrix = new MatrixMultiplier($rawArray['data']);
 
         return $matrix->multiplyArrays();
     }
-    
 }

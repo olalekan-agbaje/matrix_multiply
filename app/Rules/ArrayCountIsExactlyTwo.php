@@ -27,7 +27,7 @@ class ArrayCountIsExactlyTwo implements Rule
     {
         if (count($value) == 2) {
             return true;
-        } 
+        }
     }
 
     /**

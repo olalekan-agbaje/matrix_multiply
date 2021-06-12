@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Models\Traits;
+
 trait NumberToAlphabetsTrait
 {
     /**
@@ -26,13 +27,13 @@ trait NumberToAlphabetsTrait
          */
 
         // ensuere that $num is never less than zero
-        $num = $num > 0 ? $num -= 1 : 0; 
+        $num = $num > 0 ? $num -= 1 : 0;
 
         $i = (int) floor($num / 26);
 
         return $i > 0 ? $this->numToAlpha($i) . $letters[$num % 26] : $letters[$num % 26];
     }
-    
+
     /**
      * Convert the numeric array to an alphabetic array
      * @param array $matrix
@@ -50,9 +51,7 @@ trait NumberToAlphabetsTrait
          * get the alphabetic equivalent of the number in this position
          */
         for ($i = 0; $i < $row; $i++) {
-
             for ($j = 0; $j < $col; $j++) {
-
                 $matrix[$i][$j] = $this->numToAlpha($matrix[$i][$j]);
             }
         }
