@@ -91,7 +91,7 @@ class MatrixMultiplicationTest extends TestCase
     {
         return [
             ["AX", "AP", "AP"],
-            ["Y", "CR", "ZA"]
+            ["Y", "CR", "Z"]
         ];
     }
 
