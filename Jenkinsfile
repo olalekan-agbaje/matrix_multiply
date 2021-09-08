@@ -3,18 +3,17 @@ pipeline {
         label 'vagrant'
     }
     stages {
-        stage('Build'){
+        stage('Build + PHP Version'){
             steps {
                 sh 'php --version'
             }
         }
-        stage('Check PHP Version + Composer stuff'){   
+        stage('Composer Install'){   
             steps{
                 sh 'composer install'
-                sh 'composer --version'
             }
         }
-        stage('Prepare env and DB'){
+        stage('Prepare env and Migrate DB'){
             steps{            
                 sh 'cp .env.example .env'
                 sh 'php artisan key:generate'
